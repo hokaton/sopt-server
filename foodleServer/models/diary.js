@@ -2,8 +2,8 @@ const pool = require('../modules/pool');
 const table = 'foodList';
 
 const food = {
-    showFoodList : async () => {
-        const query = `SELECT * FROM ${table}`;
+    showFoodList : async (uid) => {
+        const query = `SELECT diary_title, icon_img, diary_content FROM ${table} WHERE uid = '${uid}';`;
 
         try {
             const result = await pool.queryParam(query);
@@ -17,11 +17,14 @@ const food = {
             throw err;
         }
     },
-    diaryRegister : async (userId, title, category, content) => {
-        const fields = 'uid, diary_title, img_category, diary_content';
-        const questions = '?, ?, ?, ?'
-        const values = [userId, title, category, content]
-        const query = `INSERT INTO ${table}(${fields}) VALUES(${questions})`;
+    diaryRegister : async (userId, title, img, category, content, date) => {
+
+        const fields = 'uid, diary_title, icon_img, diary_content, icon_category, diary_date';
+        const questions = '?, ?, ?, ?, ?, ?'
+        const values = [userId, title, img, content, category, date]
+        const query = `INSERT INTO ${table}(${fields}) VALUES(${questions});`;
+        ///const query =`INSERT INTO foodList (uid, diary_title, icon_category, diary_content, diary_date) VALUES(${userId}, ${title} , ${category}, ${content}, ${date});`;
+        
 
         try {
             const result = await pool.queryParamArr(query, values);
@@ -38,7 +41,7 @@ const food = {
         }
     },
     showCal : async (uid) => {
-        const query = `SELECT * FROM ${table} WHERE uid = '${uid}'`;
+        const query = `SELECT diary_date, diary_write, icon_img FROM ${table} WHERE uid = '${uid}' order by diary_date`;
 
         try {
             const result = await pool.queryParam(query);
