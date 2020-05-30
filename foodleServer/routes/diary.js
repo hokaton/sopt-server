@@ -12,16 +12,15 @@ router.get('/list/:uid', async (req, res) => {
     const uid = req.params.uid;
     const foodlist = await foodModel.showFoodList(uid);
 
-    if(foodlist[0] === undefined) {
-        res.status(statusCode.BAD_REQUEST)
-        .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_BLOG));
+    if (foodlist[0] === undefined) {
+        return res.status(statusCode.BAD_REQUEST)
+        .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_DIARY));
     }
 
-    console.log(foodlist);
-
+    // console.log(foodlist);
 
     res.status(statusCode.OK)
-    .send(util.success(statusCode.OK, resMessage.BLOG_SUCCESS, foodlist));
+    .send(util.success(statusCode.OK, resMessage.DIARY_SUCCESS, foodlist));
 });
 
 // 일기 작성
@@ -34,6 +33,11 @@ router.post('/register', async (req, res) => {
     } = req.body;
     const date = moment().format("MM월 DD일");
     var img;
+
+    if (!userId || !title || !category || !content) {
+        return res.status(statusCode.BAD_REQUEST)
+        .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+    }
 
     if(category === "일식"){
         img = "https://user-images.githubusercontent.com/39720852/83339704-6f919100-a30b-11ea-963b-303a2bb13f66.png";
@@ -51,23 +55,34 @@ router.post('/register', async (req, res) => {
         img = "https://user-images.githubusercontent.com/39720852/83339903-2fcba900-a30d-11ea-80d3-c41fd8b42445.png";
     }
     
-    try{const idx = await foodModel.diaryRegister(userId, title, img, category, content, date);
-    //res.status(statusCode.Ok).send(util.success(statusCode.Ok, resMessage.BLOG_SUCCESS, {diaryIdx: idx} ));
-    res.status(statusCode.OK)
-    .send(util.success(statusCode.OK, resMessage.BLOG_SUCCESS, {idx: idx} ));
+    try {
+        const idx = await foodModel.diaryRegister(userId, title, img, category, content, date);
+
+        res.status(statusCode.OK)
+        .send(util.success(statusCode.OK, resMessage.CREATE_DIARY, {idx: idx}));
     } catch(err){
         console.log(err);
         throw err;
     }
 });
 
+// 달력 조회
 router.get('/:uid', async (req, res) => {
     const uid = req.params.uid;
     const cal = await foodModel.showCal(uid);
 
+    // if (uid === null) {
+    //     return res.status(statusCode.BAD_REQUEST)
+    //     .send(util.fail(statusCode.BAD_REQUEST, resMessage.OUT_OF_VALUE));
+    // }
+
+    if (cal[0] === undefined) {
+        return res.status(statusCode.BAD_REQUEST)
+        .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_DIARY));
+    }
 
     res.status(statusCode.OK)
-    .send(util.success(statusCode.OK, resMessage.BLOG_SUCCESS, cal));
+    .send(util.success(statusCode.OK, resMessage.CALENDAR_SUCCESS, cal));
 })
 
 module.exports = router;

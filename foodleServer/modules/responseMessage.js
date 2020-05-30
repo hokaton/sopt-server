@@ -23,6 +23,16 @@ module.exports = {
     UPDATE_BLOG: "블로그 업데이트 성공",
     DELETE_BLOG: "블로그 삭제 성공",
 
+    // diary 조회
+    NO_DIARY: "일기가 존재하지 않습니다.",
+    DIARY_SUCCESS: "일기 리스트 조회 성공",
+    CREATE_DIARY: "일기 등록 성공",
+    UPDATE_DIARY: "일기 업데이트 성공",
+    DELETE_DIARY: "일기 삭제 성공",
+
+    // 달력 조회
+    CALENDAR_SUCCESS: "달력 조회 성공",
+
     // 인증
     EMPTY_TOKEN: '토큰 값이 없습니다.',
     EXPIRED_TOKEN: '토큰 값이 만료되었습니다.',
