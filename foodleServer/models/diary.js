@@ -17,11 +17,11 @@ const food = {
             throw err;
         }
     },
-    diaryRegister : async (userId, title, img, category, content, date) => {
+    diaryRegister : async (uid, diary_title, img, icon_category, diary_content, date) => {
 
         const fields = 'uid, diary_title, icon_img, diary_content, icon_category, diary_date';
         const questions = '?, ?, ?, ?, ?, ?'
-        const values = [userId, title, img, content, category, date]
+        const values = [uid, diary_title, img, diary_content, icon_category, date]
         const query = `INSERT INTO ${table}(${fields}) VALUES(${questions});`;
         ///const query =`INSERT INTO foodList (uid, diary_title, icon_category, diary_content, diary_date) VALUES(${userId}, ${title} , ${category}, ${content}, ${date});`;
         

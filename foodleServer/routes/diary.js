@@ -26,29 +26,29 @@ router.get('/list/:uid', async (req, res) => {
 // 일기 작성
 router.post('/register', async (req, res) => {
     const {
-        userId, 
-        title,
-        category,
-        content
+        uid, 
+        diary_title,
+        icon_category,
+        diary_content
     } = req.body;
     const date = moment().format("MM월 DD일");
     var img;
 
-    if (!userId || !title || !category || !content) {
+    if (!uid || !diary_title || !icon_category || !diary_content) {
         return res.status(statusCode.BAD_REQUEST)
         .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
     }
 
-    if(category === "일식"){
+    if(icon_category === "일식"){
         img = "https://user-images.githubusercontent.com/39720852/83339704-6f919100-a30b-11ea-963b-303a2bb13f66.png";
     }
-    else if (category === "중식"){
+    else if (icon_category === "중식"){
         img = "https://user-images.githubusercontent.com/39720852/83339843-6bb23e80-a30c-11ea-88cd-c1e3c6497a5e.png";
     }
-    else if (category === "한식"){
+    else if (icon_category === "한식"){
         img = "https://user-images.githubusercontent.com/39720852/83339887-03179180-a30d-11ea-9544-f523a4d311b4.png";
     }
-    else if (category === "분식"){
+    else if (icon_category === "분식"){
         img = "https://user-images.githubusercontent.com/39720852/83339898-1dea0600-a30d-11ea-8d19-a0d9f8a86b50.png";
     }
     else{
@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
     }
     
     try {
-        const idx = await foodModel.diaryRegister(userId, title, img, category, content, date);
+        const idx = await foodModel.diaryRegister(uid, diary_title, img, icon_category, diary_content, date);
 
         res.status(statusCode.OK)
         .send(util.success(statusCode.OK, resMessage.CREATE_DIARY, {idx: idx}));
